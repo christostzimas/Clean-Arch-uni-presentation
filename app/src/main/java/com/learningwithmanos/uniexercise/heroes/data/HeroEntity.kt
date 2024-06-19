@@ -13,9 +13,9 @@ data class HeroEntity (
     @ColumnInfo("name")
     val name: String,
 
-    @ColumnInfo("name")
+    @ColumnInfo("Comics")
     val availableComics: Int,
 
-    @ColumnInfo("name")
+    @ColumnInfo("Image")
     val imageUrl: String
 )
