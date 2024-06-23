@@ -9,6 +9,8 @@ import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSourceImpl
 import com.learningwithmanos.uniexercise.heroes.source.remote.DummyRestFrameworkWrapper
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
+import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelApi
+import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelApiImpl
 import com.learningwithmanos.uniexercise.heroes.source.remote.RestFrameworkWrapper
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUCImpl
@@ -77,4 +79,9 @@ interface HeroesModule {
     fun bindsDBWrapper(
         dummyDBWrapper: DummyDBWrapper
     ): DBWrapper
+
+    @Binds
+    fun bindMarvelApi(
+        marvelApiImpl: MarvelApiImpl
+    ): MarvelApi
 }

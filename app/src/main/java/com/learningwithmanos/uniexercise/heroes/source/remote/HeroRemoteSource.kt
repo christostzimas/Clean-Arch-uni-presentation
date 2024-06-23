@@ -25,7 +25,10 @@ class HeroRemoteSourceImpl @Inject constructor(
         val response: MarvelApiResponse = marvelApi.getData()
 
         return if (response.code == 200) {
-            response.data.results.map { it.mapToHero() }
+
+            response.data.results.map {
+                it.mapToHero()
+            }
         } else {
             emptyList()
         }
