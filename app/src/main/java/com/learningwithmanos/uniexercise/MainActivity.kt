@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         appPref.setup(applicationContext)
 
+        appPref.apikey = "d117e3f0cef58a87791767d25a5ab3c2"
 
 
         setContent {

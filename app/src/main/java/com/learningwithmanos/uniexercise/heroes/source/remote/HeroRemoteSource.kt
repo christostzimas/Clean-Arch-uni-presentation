@@ -1,6 +1,8 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.data.MarvelApiHeroe
+import com.learningwithmanos.uniexercise.heroes.data.MarvelApiResponse
 import javax.inject.Inject
 
 /**
@@ -15,12 +17,28 @@ interface HeroRemoteSource {
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
-    private val restFrameworkWrapper: DummyRestFrameworkWrapper,
+    //private val restFrameworkWrapper: DummyRestFrameworkWrapper,
+    private val marvelApi: MarvelApi,
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): List<Hero> {
-        return restFrameworkWrapper.getHeroes()
+        val response: MarvelApiResponse = marvelApi.getData()
+
+        return if (response.code == 200) {
+            response.data.results.map { it.mapToHero() }
+        } else {
+            emptyList()
+        }
     }
 
+
+    private fun MarvelApiHeroe.mapToHero(): Hero {
+        return Hero(
+            id = this.id,
+            name = this.name,
+            availableComics = this.availableComics.availableComics,
+            imageUrl = this.imageUrl.toUrl()
+        )
+    }
 }
 
