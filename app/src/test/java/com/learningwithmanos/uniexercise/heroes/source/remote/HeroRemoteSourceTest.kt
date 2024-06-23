@@ -12,12 +12,12 @@ class HeroRemoteSourceImplTest {
 
     private lateinit var heroRemoteSourceImpl: HeroRemoteSourceImpl
 
-    private val restFrameworkWrapperMock: DummyRestFrameworkWrapper = mock()
+    private val marvelRestApiMock: MarvelApi = mock()
 
     @Before
     fun setUp() {
         heroRemoteSourceImpl = HeroRemoteSourceImpl(
-            restFrameworkWrapperMock
+            marvelRestApiMock
         )
     }
 
@@ -27,6 +27,6 @@ class HeroRemoteSourceImplTest {
         heroRemoteSourceImpl.getHeroes()
 
         // then
-        verify(restFrameworkWrapperMock).getHeroes()
+        verify(marvelRestApiMock).getData()
     }
 }

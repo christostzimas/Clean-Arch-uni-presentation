@@ -22,9 +22,7 @@ class MarvelApiImpl @Inject constructor() : MarvelApi {
             response = client.getCharacters(
                 params.timestamp,
                 params.apiKey,
-                params.hash//,
-                //20,
-                //0
+                params.hash
             )
         } catch (_: Exception) {
             response.data = MarvelApiHeroesResponse(listOf())

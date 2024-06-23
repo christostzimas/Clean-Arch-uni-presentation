@@ -12,13 +12,13 @@ class HeroLocalSourceImplTest {
 
     private lateinit var heroLocalSourceImpl: HeroLocalSourceImpl
 
-    private val dbWrapperMock: DBWrapper = mock()
+    private val heroesDaoMock: HeroesDao = mock()
 
 
     @Before
     fun setUp() {
         heroLocalSourceImpl = HeroLocalSourceImpl(
-            dbWrapperMock
+            heroesDaoMock
         )
     }
 
@@ -28,7 +28,7 @@ class HeroLocalSourceImplTest {
         heroLocalSourceImpl.isHeroDataStored()
 
         // then
-        verify(dbWrapperMock).isHeroDataStored()
+        verify(heroesDaoMock).isEmpty()
     }
 
     @Test
@@ -37,7 +37,7 @@ class HeroLocalSourceImplTest {
         heroLocalSourceImpl.storeHeroes(listOf())
 
         // then
-        verify(dbWrapperMock).storeHeroes(listOf())
+        verify(heroesDaoMock).insertHeroes(listOf())
     }
 
     @Test
@@ -46,7 +46,7 @@ class HeroLocalSourceImplTest {
         heroLocalSourceImpl.getHeroes()
 
         // then
-        verify(dbWrapperMock).getHeroes()
+        verify(heroesDaoMock).getAllHeroes()
     }
 
 }

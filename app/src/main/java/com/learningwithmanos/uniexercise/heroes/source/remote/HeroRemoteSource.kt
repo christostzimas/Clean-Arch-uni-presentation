@@ -17,7 +17,6 @@ interface HeroRemoteSource {
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
-    //private val restFrameworkWrapper: DummyRestFrameworkWrapper,
     private val marvelApi: MarvelApi,
 ): HeroRemoteSource {
 

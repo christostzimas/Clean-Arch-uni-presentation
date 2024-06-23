@@ -26,23 +26,16 @@ interface HeroLocalSource {
      * @return the list of heroes stored at the local storage
      */
     fun getHeroes(): Flow<List<Hero>>
-
-    /**
-    * @return true if local heroes don't exist
-    */
-    fun isEmpty(): Flow<Boolean>
 }
 
 class HeroLocalSourceImpl @Inject constructor(
-    private val dbWrapper: DBWrapper,
     private val heroesDao: HeroesDao
 ): HeroLocalSource {
     override fun isHeroDataStored(): Flow<Boolean> {
-        return dbWrapper.isHeroDataStored()
+        return heroesDao.isEmpty()
     }
 
     override suspend fun storeHeroes(heroes: List<Hero>) {
-        //dbWrapper.storeHeroes(heroes = heroes)
         val heroesList: List<HeroEntity> = heroes.map {
             it.mapToHeroEntity()
         }
@@ -50,14 +43,9 @@ class HeroLocalSourceImpl @Inject constructor(
     }
 
     override fun getHeroes(): Flow<List<Hero>> {
-        //return dbWrapper.getHeroes()
         return heroesDao.getAllHeroes().map{
             heroesList -> heroesList.map { it.mapToHero() }
         }
-    }
-
-    override fun isEmpty(): Flow<Boolean> {
-        return heroesDao.isEmpty()
     }
 
     /**
