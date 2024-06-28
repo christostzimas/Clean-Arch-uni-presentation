@@ -33,12 +33,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.learningwithmanos.uniexercise.appPref
 import com.learningwithmanos.uniexercise.heroes.data.Tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeroesScreen(
+    navController: NavHostController,
     onIconButtonPressed: () -> Unit,
     viewModel: HeroesViewModel = hiltViewModel()
 ) {
@@ -121,7 +123,7 @@ fun HeroesScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                onIconButtonPressed.invoke()
+                                navController.navigate("Settings")
                             }
                         ) {
                             Text("Confirm")
