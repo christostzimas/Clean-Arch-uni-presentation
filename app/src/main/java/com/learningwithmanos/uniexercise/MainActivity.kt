@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.learningwithmanos.uniexercise.heroes.ui.HeroesScreen
+import com.learningwithmanos.uniexercise.settings.ui.SettingsScreen
 import com.learningwithmanos.uniexercise.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,6 +45,10 @@ class MainActivity : ComponentActivity() {
                         ) {
                             HeroesScreen(onIconButtonPressed = { navController.navigate("Api") })
                         }
+                    }
+
+                    composable("Api") {
+                        SettingsScreen(onIconButtonPressed = { navController.navigate("Heroes") })
                     }
                 }
             }

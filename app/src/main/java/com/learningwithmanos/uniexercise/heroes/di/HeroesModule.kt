@@ -14,6 +14,11 @@ import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUCImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesUCImpl
+import com.learningwithmanos.uniexercise.settings.repo.SettingsRepository
+import com.learningwithmanos.uniexercise.settings.repo.SettingsRepositoryImpl
+import com.learningwithmanos.uniexercise.settings.usecase.GetSharedPreferencesUC
+import com.learningwithmanos.uniexercise.settings.usecase.GetSharedPreferencesUCImpl
+import com.learningwithmanos.uniexercise.settings.usecase.SaveSharedPreferencesUC
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -67,4 +72,5 @@ interface HeroesModule {
     fun bindMarvelApi(
         marvelApiImpl: MarvelApiImpl
     ): MarvelApi
+
 }

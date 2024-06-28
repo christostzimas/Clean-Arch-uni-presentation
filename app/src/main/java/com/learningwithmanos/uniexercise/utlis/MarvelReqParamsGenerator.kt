@@ -12,7 +12,7 @@ data class Params(
 class MarvelReqParamsGenerator {
 
     val apiKey: String? = appPref.apikey //public key
-    private val privateKey: String? = "4ed3c347445ff672efdde319dd0c2f817034921d"
+    private val privateKey: String? = appPref.privatekey
     var timestamp: Long? = null
     var hash: String? = null
 
