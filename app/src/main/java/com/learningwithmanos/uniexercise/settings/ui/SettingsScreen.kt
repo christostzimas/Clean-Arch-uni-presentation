@@ -22,13 +22,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen (
-    onIconButtonPressed: NavHostController,
+    onIconButtonPressed: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
 
