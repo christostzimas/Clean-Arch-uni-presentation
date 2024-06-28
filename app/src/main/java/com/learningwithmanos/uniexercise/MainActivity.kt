@@ -61,15 +61,7 @@ data class BottomNavigationItem(
     val badgeCount: Int? = null
 )
 
-@Composable
-fun AppNavGraph(navController: NavHostController, padding: Modifier) {
-    NavHost(navController, startDestination = "heroes") {
-        composable("heroes") { HeroesScreen(navController) }
-        composable("query") { QueryScreen(navController) }
-        composable("quiz") { QuizScreen(navController) }
-        composable("settings") { SettingsScreen(navController) }
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -108,6 +100,9 @@ class MainActivity : ComponentActivity() {
                 )
                 var selectedItemIndex by rememberSaveable {
                     mutableStateOf(0)
+                }
+                val onIconButtonPressed: () -> Unit = {
+                    navController.navigate("settings")
                 }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -152,7 +147,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {innerPadding ->
-                        AppNavGraph(navController, Modifier.padding(innerPadding))}
+                        AppNavGraph(navController, Modifier.padding(innerPadding), onIconButtonPressed)}
                 }
             }
         }
@@ -160,17 +155,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyApplicationTheme {
-        Greeting("Android")
+fun AppNavGraph(navController: NavHostController, padding: Modifier, onIconButtonPressed: () -> Unit) {
+    NavHost(navController, startDestination = "heroes") {
+        composable("heroes") { HeroesScreen(navController, onIconButtonPressed) }
+        composable("query") { QueryScreen(navController) }
+        composable("quiz") { QuizScreen(navController) }
+        composable("settings") { SettingsScreen(onIconButtonPressed) }
     }
 }
+
