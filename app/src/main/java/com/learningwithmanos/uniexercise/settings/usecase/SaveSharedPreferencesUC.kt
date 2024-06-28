@@ -15,10 +15,10 @@ class SaveSharedPreferencesUCImpl @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : SaveSharedPreferencesUC {
     override suspend fun savePrivateKey(value: String) {
-        settingsRepository.savePrivateKey(value);
+        settingsRepository.savePrivateKey(value)
     }
 
     override suspend fun savePublicKey(value: String) {
-        settingsRepository.savePublicKey(value);
+        settingsRepository.savePublicKey(value)
     }
 }
