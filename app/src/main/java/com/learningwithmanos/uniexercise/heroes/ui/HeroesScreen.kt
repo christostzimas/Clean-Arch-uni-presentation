@@ -41,15 +41,11 @@ import com.learningwithmanos.uniexercise.heroes.data.Tab
 @Composable
 fun HeroesScreen(
     navController: NavHostController,
-    onIconButtonPressed: () -> Unit,
     viewModel: HeroesViewModel = hiltViewModel()
 ) {
-
-    val selectedTab = viewModel.selectedTabStateFlow.collectAsState()
     val heroesList = viewModel.heroesStateFlow.collectAsState()
 
-    Scaffold (
-        modifier = Modifier.nestedScroll(TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()).nestedScrollConnection),
+    Scaffold(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -60,7 +56,7 @@ fun HeroesScreen(
                     Text("Marvel Characters List")
                 },
                 actions = {
-                    IconButton(onClick = onIconButtonPressed ) {
+                    IconButton(onClick = { navController.navigate("settings") }) {
                         Icon(
                             imageVector = Icons.Filled.Build,
                             contentDescription = "Api Setup"
@@ -69,44 +65,21 @@ fun HeroesScreen(
                 }
             )
         }
-    ) {
-            innerPadding ->
-        Column (
+    ) { innerPadding ->
+        Column(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            TabRow(
-                selectedTabIndex = viewModel.getSelectedIndex(selectedTab.value),
-            ) {
-                Text(
-                    modifier = Modifier.clickable { viewModel.selectTab(Tab.Heroes) },
-                    textAlign = TextAlign.Center,
-                    text = "Heroes"
-                )
-                Text(
-                    modifier = Modifier.clickable { viewModel.selectTab(Tab.SortedByNameHeroes) },
-                    textAlign = TextAlign.Center,
-                    text = "A-Z Heroes"
-                )
-                Text(
-                    modifier = Modifier.clickable { viewModel.selectTab(Tab.SortedByComicHeroes) },
-                    textAlign = TextAlign.Center,
-                    text = "Heroes by Comic"
-                )
-            }
-
-            if ( !appPref.apikey.isNullOrBlank() || !appPref.privatekey.isNullOrBlank()) {
+        ) {
+            if (!viewModel.apiKeyIsNullOrBlank()) {
                 Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
                     if (heroesList.value.isNotEmpty())
                         ShowHeroes(heroes = heroesList.value)
                     else
                         ShowError()
                 }
-            }
-            else
+            } else {
                 AlertDialog(
                     icon = {
                         Icon(
@@ -123,7 +96,7 @@ fun HeroesScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                navController.navigate("Settings")
+                                navController.navigate("settings")
                             }
                         ) {
                             Text("Confirm")
@@ -131,6 +104,7 @@ fun HeroesScreen(
                     },
                     onDismissRequest = {}
                 )
+            }
         }
     }
 }
@@ -154,13 +128,9 @@ fun ShowHeroes(heroes: List<HeroTileModel>) {
 
 @Composable
 fun ShowError() {
-    Row {
-        Text(text = "There are problem with request to the api.")
-    }
-    Row {
-        Text(text = "Check if api and private key are correct")
-    }
-    Row {
-        Text(text = "Go to Api configuration page to configure")
+    Column {
+        Text(text = "There are problems with the request to the API.")
+        Text(text = "Check if API and private key are correct.")
+        Text(text = "Go to the API configuration page to configure.")
     }
 }
