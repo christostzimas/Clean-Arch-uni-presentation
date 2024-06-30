@@ -42,6 +42,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -53,114 +55,106 @@ import com.learningwithmanos.uniexercise.settings.ui.SettingsScreen
 import com.learningwithmanos.uniexercise.theme.MyApplicationTheme
 
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
 
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
-                val navController = rememberNavController()
+            MyApp()
+        }
+    }
+}
 
-                val items = listOf(
-                    BottomNavigationItem(
-                        title = "Heroes",
-                        selectedIcon = Icons.Filled.Home,
-                        unselectedIcon = Icons.Outlined.Home,
-                        hasNews = false,
-                    ),
-                    BottomNavigationItem(
-                        title = "Query",
-                        selectedIcon = Icons.Filled.Search,
-                        unselectedIcon = Icons.Outlined.Search,
-                        hasNews = false,
-                    ),
-                    BottomNavigationItem(
-                        title = "Quiz",
-                        selectedIcon = Icons.Filled.Newspaper,
-                        unselectedIcon = Icons.Outlined.Newspaper,
-                        hasNews = false,
-                        badgeCount = 45
-                    ),
-                    BottomNavigationItem(
-                        title = "Settings",
-                        selectedIcon = Icons.Filled.Settings,
-                        unselectedIcon = Icons.Outlined.Settings,
-                        hasNews = true,
-                    ),
-                )
-                var selectedItemIndex by rememberSaveable {
-                    mutableStateOf(0)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyApp() {
+    val navController = rememberNavController()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("My App") },
+                actions = {
+                    IconButton(onClick = { navController.navigate("settings") }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_settings),
+                            contentDescription = "Settings"
+                        )
+                    }
                 }
-                val onIconButtonPressed: () -> Unit = {
-                    navController.navigate("settings")
-                }
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                        bottomBar = {
-                            NavigationBar {
-                                items.forEachIndexed { index, item ->
-                                    NavigationBarItem(
-                                        selected = selectedItemIndex == index,
-                                        onClick = {
-                                            selectedItemIndex = index
-                                            navController.navigate(item.title)
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        alwaysShowLabel = false,
-                                        icon = {
-                                            BadgedBox(
-                                                badge = {
-                                                    if(item.badgeCount != null) {
-                                                        Badge {
-                                                            Text(text = item.badgeCount.toString())
-                                                        }
-                                                    } else if(item.hasNews) {
-                                                        Badge()
-                                                    }
-                                                }
-                                            ) {
-                                                Icon(
-                                                    imageVector = if (index == selectedItemIndex) {
-                                                        item.selectedIcon
-                                                    } else item.unselectedIcon,
-                                                    contentDescription = item.title
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    ) {innerPadding ->
-                        AppNavGraph(navController, Modifier.padding(innerPadding), onIconButtonPressed)}
-                }
-            }
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(navController)
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "heroes",
+            Modifier.padding(innerPadding)
+        ) {
+            composable("heroes") { HeroesScreen()}
+            composable("search") { SearchScreen() }
+            composable("quiz") { QuizScreen() }
+            composable("settings") { SettingsScreen() }
         }
     }
 }
 
 @Composable
-fun AppNavGraph(navController: NavHostController, padding: Modifier, onIconButtonPressed: () -> Unit) {
-    NavHost(navController, startDestination = "heroes") {
-        composable("heroes") { HeroesScreen(navController, onIconButtonPressed) }
-        composable("query") { QueryScreen(navController) }
-        composable("quiz") { QuizScreen(navController) }
-        composable("settings") { SettingsScreen(onIconButtonPressed) }
+fun BottomNavigationBar(navController: NavHostController) {
+    val items = listOf(
+        BottomNavItem("Heroes", R.drawable.ic_heroes, "heroes"),
+        BottomNavItem("Search", R.drawable.ic_search, "search"),
+        BottomNavItem("Quiz", R.drawable.ic_quiz, "quiz")
+    )
+    NavigationBar {
+        items.forEach { item ->
+            NavigationBarItem(
+                icon = { Icon(painterResource(id = item.icon), contentDescription = item.name) },
+                label = { Text(item.name) },
+                selected = navController.currentDestination?.route == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+        }
     }
 }
+
+
+
+@Composable
+fun HeroesScreen() {
+    // Content for the Heroes screen
+    Text(text = "Heroes Screen")
+}
+
+
+@Composable
+fun SearchScreen() {
+    // Content for the Search screen
+    Text(text = "Search Screen")
+}
+
+@Composable
+fun QuizScreen() {
+    // Content for the Quiz screen
+    Text(text = "Quiz Screen")
+}
+
+@Composable
+fun SettingsScreen() {
+    // Content for the Settings screen
+    Text(text = "Settings Screen")
+}
+
+data class BottomNavItem(val name: String, val icon: Int, val route: String)
+
 
