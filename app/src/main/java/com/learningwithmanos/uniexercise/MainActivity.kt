@@ -75,7 +75,7 @@ fun MyApp() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My App") },
+                title = { Text("Marvel App") },
                 actions = {
                     IconButton(onClick = { navController.navigate("settings") }) {
                         Icon(
